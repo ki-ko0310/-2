@@ -71,9 +71,9 @@
   <div class="quiz-box">
     <div class="question" id="question">Loading...</div>
     <div class="extra-info" id="pronunciation"></div>
-    <div class="extra-info" id="synonyms"></div>
     <div class="options" id="options"></div>
     <div class="feedback" id="feedback"></div>
+    <div class="extra-info" id="synonyms"></div>
     <div id="score">スコア: 0 / 0</div>
     <button id="next-btn" onclick="nextQuestion()">次へ ▶</button>
   </div>
@@ -125,7 +125,7 @@
       const q = quizData[current];
       document.getElementById('question').textContent = `"${q.word}" の意味は？`;
       document.getElementById('pronunciation').textContent = `発音: ${q.pronunciation}`;
-      document.getElementById('synonyms').textContent = `類義語: ${q.synonyms.join(", ")}`;
+      document.getElementById('synonyms').textContent = '';
 
       const opts = shuffle([...q.options]);
       const optionsDiv = document.getElementById('options');
@@ -142,6 +142,7 @@
           total++;
           document.getElementById('feedback').textContent =
             isCorrect ? "正解！🎉" : `不正解。正解は：${q.correct}`;
+          document.getElementById('synonyms').textContent = `類義語: ${q.synonyms.join(", ")}`;
           document.getElementById('next-btn').style.display = 'inline-block';
           Array.from(optionsDiv.children).forEach(b => b.disabled = true);
           updateScore();
