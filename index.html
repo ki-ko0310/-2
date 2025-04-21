@@ -64,6 +64,7 @@
       margin-top: 1em;
       font-size: 0.95em;
       color: #555;
+      display: none;
     }
   </style>
 </head>
@@ -125,7 +126,8 @@
       const q = quizData[current];
       document.getElementById('question').textContent = `"${q.word}" の意味は？`;
       document.getElementById('pronunciation').textContent = `発音: ${q.pronunciation}`;
-      document.getElementById('synonyms').textContent = '';
+      document.getElementById('pronunciation').style.display = 'block';
+      document.getElementById('synonyms').style.display = 'none';
 
       const opts = shuffle([...q.options]);
       const optionsDiv = document.getElementById('options');
@@ -143,6 +145,7 @@
           document.getElementById('feedback').textContent =
             isCorrect ? "正解！🎉" : `不正解。正解は：${q.correct}`;
           document.getElementById('synonyms').textContent = `類義語: ${q.synonyms.join(", ")}`;
+          document.getElementById('synonyms').style.display = 'block';
           document.getElementById('next-btn').style.display = 'inline-block';
           Array.from(optionsDiv.children).forEach(b => b.disabled = true);
           updateScore();
