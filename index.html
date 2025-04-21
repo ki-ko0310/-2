@@ -134,7 +134,7 @@
       loadQuestion();
     }
 
-    fetch("/quiz_english_to_japanese_500words.json")
+   fetch("quiz_english_to_japanese_500words.json")
       .then(res => res.json())
       .then(data => {
         quizData = shuffle(data);
