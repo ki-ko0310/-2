@@ -99,7 +99,7 @@
 
     function loadQuestion() {
       const q = quizData[current];
-      const cleanWord = q.word.split('_')[0];
+      const cleanWord = q.word.includes('_') ? q.word.split('_')[0] : q.word;
       document.getElementById('question').textContent = `"${cleanWord}" の意味は？`;
       document.getElementById('pronunciation').textContent = `発音: ${q.pronunciation}`;
       document.getElementById('pronunciation').style.display = 'block';
