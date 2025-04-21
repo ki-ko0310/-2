@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Word Quiz</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2em;
+      background-color: #f0f4f8;
+    }
+    .quiz-box {
+      background: white;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 2em;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .question {
+      font-size: 1.5em;
+      margin-bottom: 1em;
+    }
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 0.5em 0;
+      padding: 0.8em;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      background-color: #e0e0e0;
+      cursor: pointer;
+    }
+    .options button:hover {
+      background-color: #d0d0ff;
+    }
+    .feedback {
+      margin-top: 1em;
+      font-weight: bold;
+    }
+    #next-btn {
+      display: none;
+      margin-top: 1.5em;
+      padding: 0.6em 1.2em;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    #next-btn:hover {
+      background-color: #0056b3;
+    }
+    #score {
+      margin-top: 1em;
+      font-size: 1.1em;
+      color: #333;
+    }
+    .extra-info {
+      margin-top: 1em;
+      font-size: 0.95em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-box">
+    <div class="question" id="question">Loading...</div>
+    <div class="extra-info" id="pronunciation"></div>
+    <div class="extra-info" id="synonyms"></div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <div id="score">スコア: 0 / 0</div>
+    <button id="next-btn" onclick="nextQuestion()">次へ ▶</button>
+  </div>
+
+  <script>
+    let quizData = [
+      {
+        word: "mitigate",
+        pronunciation: "/ˈmɪtɪˌɡeɪt/",
+        synonyms: ["alleviate", "ease", "moderate"],
+        correct: "軽減する",
+        options: ["軽減する", "加速する", "促進する", "許可する"]
+      },
+      {
+        word: "advocate",
+        pronunciation: "/ˈædvəkət/",
+        synonyms: ["support", "recommend", "champion"],
+        correct: "支持する",
+        options: ["拒否する", "支持する", "誤解する", "避ける"]
+      },
+      {
+        word: "sustain",
+        pronunciation: "/səˈsteɪn/",
+        synonyms: ["maintain", "uphold", "continue"],
+        correct: "維持する",
+        options: ["取り除く", "維持する", "隠す", "拡張する"]
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+    let total = 0;
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    quizData = shuffle(quizData);
+
+    function updateScore() {
+      document.getElementById('score').textContent = `スコア: ${score} / ${total}`;
+    }
+
+    function loadQuestion() {
+      const q = quizData[current];
+      document.getElementById('question').textContent = `"${q.word}" の意味は？`;
+      document.getElementById('pronunciation').textContent = `発音: ${q.pronunciation}`;
+      document.getElementById('synonyms').textContent = `類義語: ${q.synonyms.join(", ")}`;
+
+      const opts = shuffle([...q.options]);
+      const optionsDiv = document.getElementById('options');
+      optionsDiv.innerHTML = '';
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('next-btn').style.display = 'none';
+
+      opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.textContent = opt;
+        btn.onclick = () => {
+          const isCorrect = opt === q.correct;
+          if (isCorrect) score++;
+          total++;
+          document.getElementById('feedback').textContent =
+            isCorrect ? "正解！🎉" : `不正解。正解は：${q.correct}`;
+          document.getElementById('next-btn').style.display = 'inline-block';
+          Array.from(optionsDiv.children).forEach(b => b.disabled = true);
+          updateScore();
+        };
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function nextQuestion() {
+      current = (current + 1) % quizData.length;
+      loadQuestion();
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
